@@ -1,0 +1,45 @@
+#include"pch.h"
+#include<iostream>
+using namespace std;
+int main()
+{
+	double m1(char x);
+	double m2(double x);
+	double m3(double x);
+	double sqrt(double d);
+	double a, b, c, d, x;
+	a * (x * x) + b * x + c == 0;
+	d = b * b - 4 * a*c;
+	cin >> a >> b >> c;
+	if (d < 0)
+		x = m1(x);
+	else if (d = 0)
+		x = m2(x);
+	else if (d > 0)
+		x = m3(x);
+	cout << x << endl;
+	
+}
+double m1(char x)
+{
+	char x;
+	cout<<"x²»´æÔÚ";
+	return (x);
+}
+double m2(double x)
+{
+	double x;
+	double a, b, c, d, x;
+	x = (-b + d) / 2*a;
+	return (x);
+}
+
+double m3(double x)
+{
+	double x1,x2;
+	double a, b, c, d, x;
+	x1 = (-b + d) / 2*a;
+	x2 = (-b + d) / 2*a;
+	return (x);
+
+}

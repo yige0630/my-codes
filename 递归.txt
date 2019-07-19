@@ -1,0 +1,38 @@
+#include"pch.h"
+#include <iostream>
+#include <cmath>
+using namespace std;
+int sum = 0, count1 = 0, n;
+void dfs(int temp, int num)
+{
+	for (int i = 0; i <= sqrt(temp); i++)
+	{
+		sum += i * i;
+		if (sum == n) //当面积已经达到输入值时，不需要递归了，后面有地块的话，面积也只能是零
+
+			count1++;
+
+		else if (num < 3) //当num >= 3 时，已经超过了4块（不需要递归了！！）
+
+			dfs(n - sum, num + 1); //继续递归
+
+		sum -= i * i; //回溯
+
+	}
+
+}
+
+
+int main()
+
+{
+
+	cin >> n;
+
+	dfs(n, 0);
+
+	cout << count1 << endl;
+
+	return 0;
+
+}

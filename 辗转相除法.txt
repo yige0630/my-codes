@@ -1,0 +1,23 @@
+#include<iostream>
+using namespace std;
+int a, b, a1, b2, l;
+int gcd(int x, int y)
+{
+	if (!y)                                      \\y为假时执行后续语句（即y为零的时候)
+		return x;
+	else
+		return gcd(y, x%y);
+}
+
+int main()
+{
+	cout << "请输入两个正整数，计算它们的最大公约数" << endl;
+	int a, b, ans;
+	cin >> a >> b;
+	if (a > b)
+		ans = gcd(a, b);
+	else
+		ans = gcd(b, a);
+	cout << ans;
+	return 0;
+}

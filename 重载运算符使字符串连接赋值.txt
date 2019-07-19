@@ -1,0 +1,81 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+#include<cstring>
+using namespace std;
+class String
+{
+	char* str;
+public:
+	static int num;
+	String(char*s = 0)
+	{
+		if (s)
+		{
+			str = new char[strlen(s) + 1];
+			strcpy(str, s);
+		}
+		else
+		{
+			str = 0;
+		}
+		num++;
+	}
+	String(const String&temp)
+	{
+
+		strcpy(str, temp.str);
+		num++;
+	}
+	~String()
+	{
+		if (str)
+		{
+			delete[]str;
+			str = 0;
+		}
+		num--;
+	}
+	friend String operator+(String&s1, char*s2);
+	String &operator=(const String&s)
+	{
+		if (this == &s)
+		{
+			return *this;
+		}
+		if (str) delete[]str;
+		if (s.str)
+		{
+			str = new char[strlen(s.str) + 1];
+			strcpy(str, s.str);
+		}
+		else
+		{
+			str = 0;
+		}
+		return *this;
+	}
+	void show()
+	{
+		if (str)
+			cout << str << endl;
+	}
+};
+int String::num = 0;
+String operator+(String &s1, char*s2)
+{
+	String tmp;
+	tmp.str = new char[strlen(s1.str) + strlen(s2) + 1];
+	strcpy(tmp.str, s1.str);
+	strcat(tmp.str, s2);
+	return tmp;
+}
+int main()
+{
+	String s1((char*)"computer"), s3;
+	char *s2 = (char*)"test";
+	s1.show();
+	s3 = s1 + s2;
+	s3.show();
+	cout << "字符串对象的个数为：" << String::num << endl;
+	return 0;
+}

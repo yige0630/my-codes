@@ -1,0 +1,185 @@
+#include "pch.h"
+#include <stdlib.h>
+#include <stdio.h>
+
+struct Student
+{
+	int iNo;				//学号 
+	float fScore;			//分数，其他信息可以继续在下面增加字段
+	struct Student *pNext;	//指向下一节点的指针
+};
+
+int iCount;					//节点总数 
+struct Student *Create();
+void Print(struct Student *head);
+struct Student *Del(struct Student *head, int no);
+
+int LinkTable_main()
+{
+	struct Student *s = Create();
+	Print(s);
+	Del(s, 2);
+	Print(s);
+	return 0;
+}
+
+/*
+==========================
+功能：创建n个节点的链表
+返回：指向链表表头的指针
+==========================
+*/
+struct Student *Create()
+{
+	struct Student *pHead = NULL;		//头节点
+	struct Student *p1 = NULL;			//p1保存创建的新节点的地址
+	struct Student *p2 = NULL;			//p2保存原链表最后一个节点的地址
+
+	iCount = 0;							//创建前链表的节点总数为0：空链表
+	p1 = (struct Student *) malloc(sizeof(struct Student));	//开辟一个新节点
+	p2 = p1;							//如果节点开辟成功，则p2先把它的指针保存下来以备后用
+
+	if (p1 == NULL)						//节点开辟不成功
+	{
+		printf("\nCann't create it, try it again in a moment!\n");
+		return NULL;
+	}
+	else								//节点开辟成功
+	{
+		printf("Please input %d node -- iNo,fScore: ", iCount + 1);
+		scanf("%d %f", &(p1->iNo), &(p1->fScore));	//录入数据
+	}
+	while (p1->iNo != 0)				//只要学号不为0，就继续录入下一个节点
+	{
+		iCount += 1;					//节点总数增加1个
+		if (iCount == 1)				//如果节点总数是1，则pHead指向刚创建的节点p1
+		{
+			pHead = p1;
+			p2->pNext = NULL;			//此时的p2就是p1,也就是p1->next指向NULL。
+		}
+		else
+		{
+			p2->pNext = p1;				//指向上次下面刚刚开辟的新节点
+		}
+
+		p2 = p1;						//把p1的地址给p2保留，然后p1产生新的节点
+
+		p1 = (struct Student *) malloc(sizeof(struct Student));
+		printf("Please input %d node -- iNo,fScore: ", iCount + 1);
+		scanf("%d %f", &(p1->iNo), &(p1->fScore));
+	}
+	p2->pNext = NULL;					//此句就是根据单向链表的最后一个节点要指向NULL
+
+	free(p1);							//p1->iNo为0的时候跳出了while循环，并且释放p1
+	p1 = NULL;							//特别不要忘记把释放的变量清空置为NULL,否则就变成"野指针"，即地址不确定的指针
+	return pHead;						//返回创建链表的头指针 
+}
+/*
+===========================
+ 功能：输出节点
+ 返回： void
+===========================
+*/
+void Print(struct Student *head)
+{
+	struct Student *p;
+	printf("\nNow , These %d records are:\n", iCount);
+	p = head;
+	if (head != NULL)					//只要不是空链表，就输出链表中所有节点
+	{
+		printf("head is %o\n", head);	//输出头指针指向的地址
+		while (p != NULL)
+		{
+			/*
+			输出相应的值：当前节点地址、各字段值、当前节点的下一节点地址。
+			这样输出便于读者形象看到一个单向链表在计算机中的存储结构，和我们
+			设计的图示是一模一样的。
+			*/
+			printf("%o   %d   %5.1f   %o\n", p, p->iNo, p->fScore, p->pNext);
+			p = p->pNext;
+		}
+	}
+}
+/*
+==========================
+ 功能：删除指定节点
+  (此例中是删除指定学号的节点)
+ 返回：指向链表表头的指针
+==========================
+*/
+struct Student *Del(struct Student *head, int no)
+{
+	struct Student *p1;		//p1保存当前需要检查的节点的地址
+	struct Student *p2;		//p2保存当前检查过的节点的地址
+	if (head == NULL)		//是空链表
+	{
+		printf("\nList is null!\n");
+		return head;
+	}
+
+	//定位要删除的节点
+	p1 = head;
+	while (p1->iNo != no && p1->pNext != NULL)//p1指向的节点不是所要查找的，并且它不是最后一个节点，就继续往下找
+	{
+		p2 = p1;			//保存当前节点的地址
+		p1 = p1->pNext;		//后移一个节点
+	}
+
+	if (p1->iNo == no)		//找到了
+	{
+		if (p1 == head)		//如果要删除的节点是第一个节点
+		{
+			head = p1->pNext;//头指针指向第一个节点的后一个节点，也就是第二个节点。这样第一个节点就不在链表中，即删除
+		}
+		else				//如果是其它节点，则让原来指向当前节点的指针，指向它的下一个节点，完成删除
+		{
+			p2->pNext = p1->pNext;
+		}
+
+		free(p1);			//释放当前节点
+		p1 = NULL;
+		printf("\ndelete %ld success!\n", no);
+		iCount -= 1;		//节点总数减1个
+	}
+	else					//没有找到
+	{
+		printf("\n%ld not been found!\n", no);
+	}
+
+	return head;
+}
+/*
+==========================
+ 功能：插入指定节点的后面
+  (此例中是指定学号的节点)
+ 返回：指向链表表头的指针
+==========================
+*/
+struct Student *Insert(struct Student *head, int no, struct Student *node)
+{
+	if (head == NULL)
+	{
+		head = node;
+		node->pNext = NULL;
+		iCount += 1;
+		return head;
+	}
+
+	struct Student *p1 = head;	//p1保存当前需要检查的节点的地址
+	while (p1->iNo != no && p1->pNext != NULL)//p1指向的节点不是所要查找的，并且它不是最后一个节点，继续往下找
+	{
+		p1 = p1->pNext;			//后移一个节点
+	}
+
+	if (p1->iNo == no)			//找到了
+	{
+		node->pNext = p1->pNext;//显然node的下一节点是原p1的next
+		p1->pNext = node;		//插入后，原p1的下一节点就是要插入的node
+		iCount += 1;			//节点总数增加1个
+	}
+	else
+	{
+		printf("\n%ld not been found!\n", no);
+	}
+	return head;
+}

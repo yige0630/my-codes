@@ -1,0 +1,17 @@
+#include "pch.h"
+#include <iostream>
+using namespace std;
+int main()
+{
+	int i, j, a[10][10];
+	for (i = 1; i < 10; i++)
+	{
+		for (j = 1; j <= i; j++)
+		{
+			a[i][j] = i * j;
+			cout << i << "x" << j << "=" << a[i][j] << ' ';
+		}
+		cout << endl;
+	}
+	return 0;
+}

@@ -1,0 +1,60 @@
+#include"pch.h"
+#include<iostream>
+using namespace std;
+class Prime
+{
+public:
+	Prime(int, int);
+	void process();
+	void print();
+private:
+	bool IsPrime(int k);
+	int a[200];
+	int m, n, p = 0;
+};
+
+Prime::Prime(int a, int b)
+{
+	m = a;
+	n = b;
+}
+bool Prime::IsPrime(int k)        
+{
+	int i;
+	for (i = 2; i <= sqrt(k); i++) 
+	{
+		if (k%i == 0)
+			break;
+	}
+	if (i > sqrt(k))
+		return true;
+	else
+		return false;
+}
+void Prime::process()
+{
+	int k, i;
+	for (k = m; k < n; k++)
+		if (IsPrime(k))
+		{
+			a[p] = k;
+			p++;
+		}
+}
+void Prime::print()
+{
+	cout << "所有的素数为";
+	for (int i = 0; i < p; i++)           //200改为p
+		cout << a[i] << ' ';
+	cout << endl;
+	cout << "共有素数的个数为" << p << endl;
+}
+
+int main()
+{
+	Prime prime1(10, 50);
+	prime1.process();
+	prime1.print();
+	system("pause");
+	return 0;
+}
